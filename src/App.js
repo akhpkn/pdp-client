@@ -1,24 +1,23 @@
-import logo from './logo.svg';
+import React from "react";
+import {Button, Layout} from "antd";
 import './App.css';
+import NewPlan from "./plan/NewPlan";
+import Signup from "./user/Signup";
+import Signin from "./user/Signin";
+import {BrowserRouter} from "react-router-dom";
+import AppRouter from "./routes/AppRouter";
+import Navbar from "./Navbar";
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+      <Layout className="app-container">
+      <div className="App">
+          <BrowserRouter>
+              <Navbar/>
+              <AppRouter/>
+          </BrowserRouter>
+      </div>
+      </Layout>
   );
 }
 
