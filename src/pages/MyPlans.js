@@ -3,7 +3,7 @@ import PlanList from "../components/PlanList";
 import PlanService from "../api/PlanService";
 import {notification, Result} from "antd";
 import LoadingIndicator from "../common/LoadingIndicator";
-import NewPlan from "../plan/NewPlan";
+import NewPlan from "../components/NewPlan";
 
 import "./MyPlans.css"
 import {InfoCircleOutlined} from "@ant-design/icons";

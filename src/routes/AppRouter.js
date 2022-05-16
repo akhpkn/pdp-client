@@ -1,6 +1,6 @@
 import React, {useContext} from 'react';
 import {Navigate, Route, Routes} from "react-router-dom";
-import {privateRoutes, publicRoutes, routes} from "./index";
+import {privateRoutes, publicRoutes} from "./index";
 import {AuthContext} from "../context";
 import LoadingIndicator from "../common/LoadingIndicator";
 

@@ -2,16 +2,11 @@ import React, {useEffect, useState} from 'react';
 import {useParams} from "react-router-dom";
 import TaskService from "../api/TaskService";
 import NotificationComponent from "../common/NotificationComponent";
-import CommentService from "../api/CommentService";
 import LoadingIndicator from "../common/LoadingIndicator";
-import Task from "../components/Task";
-import Comment from "../components/Comment";
-import {Badge, Button, Form, Input, Tabs, Tooltip} from "antd";
-import Feedback from "../components/Feedback";
-import FeedbackService from "../api/FeedbackService";
+import {Badge, Tabs, Tooltip} from "antd";
 import Comments from "../components/Comments";
 import Feedbacks from "../components/Feedbacks";
-import Task3 from "../components/Task3";
+import Task from "../components/Task";
 
 const {TabPane} = Tabs
 
@@ -54,7 +49,7 @@ const TaskPage = () => {
         <div style={{marginTop: "30px", marginLeft: "10px"}}>
             {taskLoading
                 ? <LoadingIndicator/>
-                : <Task3 task={task} setChanged={needRefresh}/>
+                : <Task task={task} setChanged={needRefresh}/>
             }
             <Tabs defaultActiveKey={'none'}>
                 <TabPane tab="Комментарии" key="Комментарии">

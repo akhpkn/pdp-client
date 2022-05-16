@@ -1,12 +1,11 @@
 import React, {useContext, useEffect, useState} from "react";
 import {Button, Layout} from "antd";
 import './App.css';
-import NewPlan from "./plan/NewPlan";
-import Signup from "./user/Signup";
-import Signin from "./user/Signin";
+// import NewPlan from "./plan/NewPlan";
+// import Signup from "./user/Signup";
+// import Signin from "./user/Signin";
 import {BrowserRouter, useNavigate} from "react-router-dom";
 import AppRouter from "./routes/AppRouter";
-import Navbar from "./Navbar";
 import {AccessToken} from "./api/ApiUtils";
 import {AuthContext} from "./context";
 import AppHeader from "./common/AppHeader";
@@ -27,11 +26,6 @@ function App() {
     }, [])
 
 
-    // const navigate = useNavigate()
-    // const handleLogout = () => {
-    //     navigate('/signin')
-    // }
-
     return (
         <AuthContext.Provider value={{isAuth, setIsAuth, isLoading}}>
             <Layout className="layout">
@@ -45,12 +39,6 @@ function App() {
                 </div>
                 </Content>
                 </BrowserRouter>
-                {/*<div className="App">*/}
-                {/*    <BrowserRouter>*/}
-                {/*        <Navbar/>*/}
-                {/*        <AppRouter/>*/}
-                {/*    </BrowserRouter>*/}
-                {/*</div>*/}
                 <Footer style={{textAlign: "center", fontSize: 16}}>Personal Development Planning Application</Footer>
             </Layout>
         </AuthContext.Provider>

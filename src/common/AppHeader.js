@@ -15,18 +15,6 @@ const AppHeader = () => {
 
     const navigate = useNavigate()
 
-    const onExit = () => {
-        localStorage.removeItem(AccessToken)
-        setIsAuth(false)
-        navigate('/signin')
-    }
-
-    // const onExit = () => {
-    //     localStorage.removeItem(AccessToken)
-    //     setIsAuth(false)
-    //     props.onLogout()
-    // }
-
     let menuItems;
     if (isAuth) {
         menuItems = [
@@ -39,10 +27,7 @@ const AppHeader = () => {
             <Menu.Item key="/profile">
                 <Link to="/profile">Профиль</Link>
             </Menu.Item>,
-            // <Menu.Item key="/logout">
-            //     <Button style={{background: "rgba(255, 255, 255, 0.65)"}} onClick={onExit} type="text">Выйти</Button>
-            // </Menu.Item>
-            <Menu.Item>
+            <Menu.Item key="/logout">
                 <Link to="/logout">Выйти</Link>
             </Menu.Item>
         ]
@@ -66,7 +51,9 @@ const AppHeader = () => {
     }
 
     let href = window.location.href.split('/')
+    console.log(window.location.href)
     href = href[3]
+    console.log(href)
 
     const menuStyle = {
         position: 'relative',
@@ -77,10 +64,6 @@ const AppHeader = () => {
     return (
         <Header style={headerStyle}>
             <div >
-            {/*<div>*/}
-            {/*    <div style={{float: "left"}}>*/}
-            {/*        <Link to="/">PDP App</Link>*/}
-            {/*    </div>*/}
                 {isAuth
                     ? <Menu style={menuStyle} selectedKeys={['/'+href]} defaultSelectedKeys={['/plans']} theme="dark" mode="horizontal">
                         {menuItems}
@@ -89,9 +72,6 @@ const AppHeader = () => {
                         {menuItems}
                     </Menu>
                 }
-                {/*<Menu theme="dark" mode="horizontal">*/}
-                {/*    {menuItems}*/}
-                {/*</Menu>*/}
             </div>
         </Header>
     );

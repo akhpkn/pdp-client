@@ -2,7 +2,6 @@ import React, {useEffect, useState} from 'react';
 import UserService from "../api/UserService";
 import NotificationComponent from "../common/NotificationComponent";
 import {Avatar, Button, Form, Input, Space, Tabs, Typography} from "antd";
-import NotificationSettingsPage from "./NotificationSettingsPage";
 import NotificationSettings from "../components/NotificationsSettings"
 import LoadingIndicator from "../common/LoadingIndicator";
 
@@ -17,7 +16,6 @@ const ProfilePage = () => {
 
     const [name, setName] = useState('')
     const [surname, setSurname] = useState('')
-    const [email, setEmail] = useState('')
 
     const [fetchState, setFetchState] = useState(0)
 
@@ -28,7 +26,6 @@ const ProfilePage = () => {
                 setUser(response)
                 setName(response.name)
                 setSurname(response.surname)
-                setEmail(response.email)
                 setUserLoaded(true)
             })
             .catch(error => {
@@ -66,64 +63,7 @@ const ProfilePage = () => {
     const cancelEdit = () => {
         setName(user.name)
         setSurname(user.surname)
-        setEmail(user.email)
         setEditClicked(false)
-        setEmailValidationStatus(null)
-        setEmailValidationMessage(null)
-    }
-
-    const [emailValidationStatus, setEmailValidationStatus] = useState()
-    const [emailValidationMessage, setEmailValidationMessage] = useState()
-
-    const handleEmailChange = (input) => {
-
-        console.log(`user.email: ${user.email}`)
-        console.log(`email: ${email}`)
-        console.log(`input: ${input}`)
-        setEmail(input)
-        if (input === user.email) {
-            setEmailValidationStatus(null)
-            setEmailValidationMessage(null)
-            return;
-        }
-
-        setEmail(input)
-        setEmailValidationStatus('validating')
-        if(!input) {
-            setEmailValidationStatus('error')
-            setEmailValidationMessage('Email must not be empty')
-            return;
-        }
-
-        const EMAIL_REGEX = RegExp('[^@ ]+@[^@ ]+\\.[^@ ]+');
-        if(!EMAIL_REGEX.test(input)) {
-            setEmailValidationStatus('error')
-            setEmailValidationMessage('Email not valid')
-            return;
-        }
-
-        UserService.userExists(input)
-            .then(response => {
-                if (response.result) {
-                    setEmailValidationStatus('error')
-                    setEmailValidationMessage('Пользователь с таким email уже существует')
-                } else {
-                    setEmailValidationStatus('success')
-                    setEmailValidationMessage(null)
-                }
-            })
-            .catch(error => NotificationComponent.error(error.message))
-    }
-
-    const formItemLayout = {
-        labelCol: {
-            xs: { span: 24 },
-            sm: { span: 8 },
-        },
-        wrapperCol: {
-            xs: { span: 24 },
-            sm: { span: 16 },
-        },
     }
 
     if (!userLoaded) return <LoadingIndicator/>
@@ -145,9 +85,9 @@ const ProfilePage = () => {
             </div>
             {!editClicked
                 ? <div style={{textAlign: "left", marginLeft: "30px", fontSize: 25}}>
-                    {/*<div>{`Имя: ${user.name}`}</div>*/}
-                    {/*<div>{`Фамилия: ${user.surname}`}</div>*/}
-                    {/*<div>{`Email: ${user.email}`}</div>*/}
+                    {/*<div>{`Имя: ${auth.name}`}</div>*/}
+                    {/*<div>{`Фамилия: ${auth.surname}`}</div>*/}
+                    {/*<div>{`Email: ${auth.email}`}</div>*/}
                 </div>
                 : <div style={{textAlign: "left", marginLeft: "30px", fontSize: 25}}>
                     <Form style={{maxWidth: "300px", fontSize: 20}} labelCol={ {span: 6}} wrapperCol={{span: 16}}>
@@ -169,18 +109,6 @@ const ProfilePage = () => {
                                 onChange={(e) => setSurname(e.target.value)}
                                 value={surname}/>
                         </Form.Item>
-                        {/*<Form.Item label="Email"*/}
-                        {/*           hasFeedback*/}
-                        {/*           validateStatus={emailValidationStatus}*/}
-                        {/*           help={emailValidationMessage}>*/}
-                        {/*    <Input*/}
-                        {/*        // style={{marginLeft: "10px"}}*/}
-                        {/*        autoComplete="off"*/}
-                        {/*        placeholder="Введите email"*/}
-                        {/*        defaultValue={email}*/}
-                        {/*        onChange={(e) => handleEmailChange(e.target.value)}*/}
-                        {/*        value={email}/>*/}
-                        {/*</Form.Item>*/}
                     </Form>
                 </div>
             }

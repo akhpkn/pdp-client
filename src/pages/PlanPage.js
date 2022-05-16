@@ -1,37 +1,19 @@
-import React, {useEffect, useRef, useState} from 'react';
-import {
-    Button,
-    DatePicker,
-    Form,
-    Input,
-    Mentions,
-    Modal,
-    notification,
-    Result,
-    Select,
-    Space,
-    Tag,
-    Typography
-} from "antd";
-import Task from "../components/Task";
+import React, {useEffect, useState} from 'react';
+import {Button, Input, Mentions, notification, Result, Space, Typography} from "antd";
 import {useNavigate, useParams} from "react-router-dom";
 import PlanService from "../api/PlanService";
 import TaskService from "../api/TaskService";
 import LoadingIndicator from "../common/LoadingIndicator";
-import UserService from "../api/UserService";
-import SharingService from "../api/SharingService";
-import moment from "moment";
 import TaskAuditService from "../api/TaskAuditService";
 import NotificationComponent from "../common/NotificationComponent";
-import TimeUtil from "../common/TimeUtil";
-import Task2 from "../components/Task2";
+import TaskItem from "../components/TaskItem";
 
 import "./MyPlans.css"
 import "./PlanPage.css"
 import NewTask from "../components/NewTask";
 import ShareForm from "../components/ShareForm";
 import TasksHistory from "../components/TasksHistory";
-import {ClockCircleOutlined, InfoCircleOutlined} from "@ant-design/icons";
+import {InfoCircleOutlined} from "@ant-design/icons";
 import AccessList from "../components/AccessList";
 
 const { Option } = Mentions;
@@ -174,7 +156,7 @@ const PlanPage = () => {
                 : <div style={{maxWidth: "700px", marginTop: "10px"}}>
                     {tasks.map(task =>
                         <div>
-                            <Task2 task={task} setChanged={needRefresh} key={task.id}/>
+                            <TaskItem task={task} setChanged={needRefresh} key={task.id}/>
                         </div>
                     )}
                 </div>

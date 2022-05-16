@@ -1,13 +1,11 @@
 import React, {useState} from 'react';
-import {Button, DatePicker, Form, Input, Layout, Modal, notification} from "antd"
+import {Button, DatePicker, Form, Input, Modal, notification} from "antd"
 import moment from "moment";
 import PlanService from "../api/PlanService";
 
 import "./NewPlan.css"
 
 const FormItem = Form.Item;
-const {TextArea} = Input
-const {Content} = Layout
 
 const NewPlan = (props) => {
 
@@ -28,7 +26,7 @@ const NewPlan = (props) => {
             dueTo: `${dueDate.format(dateFormat)}T12:00:00.00Z`
         }
         PlanService.createPlan(request)
-            .then(response => {
+            .then(() => {
                 clearState()
                 props.setChanged()
                 notification.success({

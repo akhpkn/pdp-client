@@ -64,7 +64,6 @@ const TasksHistory = (props) => {
         <div>
             <Button onClick={() => setShowHistory(true)}>История задач</Button>
             <Drawer
-                // size="large"
                 visible={showHistory}
                 onClose={() => setShowHistory(false)}>
                 {auditLoading
@@ -75,9 +74,6 @@ const TasksHistory = (props) => {
                                 <Timeline.Item color={getColor(event)} label={TimeUtil.toDateTimeWithMs(event.dateTime)}>{getDescription(event)}</Timeline.Item>
                             )}
                         </Timeline>
-                        {/*{audit.map(event =>*/}
-                        {/*    <div>{` ${TimeUtil.toDateTimeWithMs(event.dateTime)} Задача ${event.taskTitle} в статусе ${event.status}`}</div>*/}
-                        {/*)}*/}
                     </div>
                 }
                 {!auditLoading && audit.length === 0 &&

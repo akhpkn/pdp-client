@@ -1,16 +1,10 @@
 import React, {useState} from 'react';
-import {Button, Form, Input, Layout, notification, Radio, Select, Typography} from "antd";
-import {DeleteOutlined} from "@ant-design/icons"
+import {Button, Input, notification, Space, Typography} from "antd";
 import TaskService from "../api/TaskService";
-import {Content} from "antd/es/layout/layout";
 import Paragraph from "antd/es/typography/Paragraph";
 import moment from "moment";
-import SharingService from "../api/SharingService";
-import NotificationComponent from "../common/NotificationComponent";
-import LoadingIndicator from "../common/LoadingIndicator";
-import FeedbackService from "../api/FeedbackService";
-
-const {Option} = Select;
+import RequestFeedback from "./RequestFeedback";
+import TextArea from "antd/es/input/TextArea";
 
 const Task = (props) => {
 
@@ -19,30 +13,6 @@ const Task = (props) => {
     const [status, setStatus] = useState(props.task.status)
     const [acceptanceCriteria, setAcceptanceCriteria] = useState(props.task.acceptanceCriteria)
 
-    const [showSave, setShowSave] = useState(false)
-
-    const handleDelete = () => {
-        TaskService.deleteTask(props.task.id)
-            .then(response => {
-                console.log(response)
-                notification.success({
-                    message: "PDP",
-                    description: "Таск удален!"
-                })
-                props.setChanged()
-                return response
-            })
-            .catch(error => {
-                console.log(error)
-                notification.error({
-                    message: "PDP",
-                    description: error.message
-                })
-                return {}
-            })
-    }
-
-    // const userFriendlyStatus
 
     const submitUpdate = () => {
         const taskUpdateRequest = {
@@ -50,9 +20,6 @@ const Task = (props) => {
             description: description,
             acceptanceCriteria: acceptanceCriteria
         }
-        // if (status !== props.task.status) {
-        //     handleStatusChanged()
-        // }
         TaskService.updateTask(props.task.id, taskUpdateRequest)
             .then(response => {
                 console.log(response)
@@ -60,7 +27,7 @@ const Task = (props) => {
                     message: "PDP",
                     description: "Таск изменен!"
                 })
-                setShowSave(false)
+                setEditMode(false)
                 props.setChanged()
                 return response
             })
@@ -104,175 +71,97 @@ const Task = (props) => {
         updateStatus(newStatus)
     }
 
-    const handleTitleChange = (newTitle) => {
-        setTitle(newTitle)
-        if (newTitle !== props.task.title) {
-            setShowSave(true)
-        } else {
-            setShowSave(false)
-        }
-    }
-
-    const handleDescriptionChange = (newDescription) => {
-        setDescription(newDescription)
-        if (newDescription !== props.task.description) {
-            setShowSave(true)
-        } else {
-            setShowSave(false)
-        }
-    }
-
-    const handleAcceptanceCriteriaChange = (newAcceptanceCriteria) => {
-        setAcceptanceCriteria(newAcceptanceCriteria)
-        if (newAcceptanceCriteria !== props.task.acceptanceCriteria) {
-            setShowSave(true)
-        } else {
-            setShowSave(false)
-        }
-    }
-
     const toDate = (instant) => {
         return moment.unix(instant).format("YYYY-MM-DD")
     }
 
-    const [feedbackClicked, setFeedbackClicked] = useState(false)
-    const [usersForFeedback, setUsersForFeedback] = useState([])
-    const [usersLoaded, setUsersLoaded] = useState(false)
-    const [selectedUser, setSelectedUser] = useState({})
-
-    const handleFeedbackClicked = () => {
-        SharingService.getUsersWithAccess(props.task.planId)
-            .then(response => {
-                setUsersForFeedback(response)
-                setFeedbackClicked(true)
-                setUsersLoaded(true)
-                setSelectedUser(response[0])
-                console.log(response)
-                console.log(usersForFeedback)
-            })
-            .catch(error => {
-                NotificationComponent.error(error.message)
-            })
+    const prettyStatus = () => {
+        const status = props.task.status
+        if (status === "New") return "TO DO"
+        if (status === "InProgress") return "IN PROGRESS"
+        if (status === "Completed") return "COMPLETED"
     }
 
-    const handleSelectedUser = (uEmail) => {
-        const user = usersForFeedback.find(user => user.userEmail === uEmail)
-        setSelectedUser(user)
-    }
+    const [editMode, setEditMode] = useState(false)
 
-    const requestFeedback = () => {
-        setFeedbackClicked(false)
-        console.log(`Requesting feedback from ${selectedUser.userId} ${selectedUser.userEmail}`)
-        const request = {
-            assigneeId: selectedUser.userId,
-            taskId: props.task.id
-        }
-        FeedbackService.requestNew(request)
-            .then(response => {
-                NotificationComponent.success(`Запрошен фидбек у ${selectedUser.userName} ${selectedUser.userSurname}`)
-            })
-            .catch(error => {
-                NotificationComponent.error(error.message)
-            })
-    }
-
-    const [feedback, setFeedback] = useState("")
-    
-    const sendFeedback = () => {
-        console.log(`Sending feedback [${feedback}]`)
-        const request = {
-            requestId: props.task.feedbackRequestId,
-            text: feedback
-        }
-        FeedbackService.send(request)
-            .then(response => {
-                NotificationComponent.success("Фидбек оправлен")
-            })
-            .catch(error => {
-                NotificationComponent.error(error.message)
-            })
+    const cancelEdit = () => {
+        setEditMode(false)
+        setTitle(props.task.title)
+        setDescription(props.task.description)
+        setAcceptanceCriteria(props.task.acceptanceCriteria)
     }
 
     return (
-        <div>
-            {props.task.readOnly
-                ? <Typography.Title>{title}</Typography.Title>
-                : <Typography.Title editable={{onChange: handleTitleChange, triggerType: "text"}} level={2}>{title}</Typography.Title>
-            }
-            {/*<Typography.Title editable={{onChange: handleTitleChange, triggerType: "text"}}*/}
-            {/*                  level={2}>{title}</Typography.Title>*/}
-            {props.task.readOnly
-                ? <Paragraph>{description}</Paragraph>
-                : <Paragraph
-                    editable={{onChange: handleDescriptionChange, triggerType: "text"}}>{description}</Paragraph>
-            }
-            {props.task.readOnly
-                ? <Paragraph>{acceptanceCriteria}</Paragraph>
-                : <Paragraph
-                    editable={{onChange: handleAcceptanceCriteriaChange, triggerType: "text"}}>{acceptanceCriteria}</Paragraph>
-            }
-            <div>
-                {`Срок выполнения: ${toDate(props.task.dueTo)}`}
+        <div >
+            <div style={{display: "flex", alignItems: "baseline"}}>
+                {editMode
+                    ? <Input
+                        style={{borderRadius: "10px", fontSize: "38px", maxWidth: "50%"}}
+                        placeholder="Название задачи"
+                        name="feedback"
+                        autoComplete="off"
+                        value={title}
+                        onChange={(e) => setTitle(e.target.value)}/>
+                    : <Typography.Title style={{textAlign: "left", maxWidth: "60%"}}>{props.task.title}</Typography.Title>
+                }
+                <Space style={{marginLeft: "auto"}}>
+                    {!props.task.readOnly && props.task.status === "New" &&
+                        <Button onClick={() => handleStatusChange("InProgress")}>
+                            Взять в работу
+                        </Button>
+                    }
+                    {!props.task.readOnly && props.task.status === "InProgress" &&
+                        <Space>
+                            <Button onClick={() => handleStatusChange("New")}>
+                                Отложить
+                            </Button>
+                            <Button onClick={() => handleStatusChange("Completed")}>
+                                Завершить
+                            </Button>
+                        </Space>
+                    }
+                    {!props.task.readOnly && !editMode &&
+                        <Button onClick={() => setEditMode(true)}>Редактировать</Button>
+                    }
+                    {editMode
+                        ? <Button type="primary" onClick={submitUpdate}>Сохранить</Button>
+                        : null
+                    }
+                    {editMode
+                        ? <Button onClick={cancelEdit}>Отменить</Button>
+                        : null
+                    }
+                    {props.task.owned && <RequestFeedback task={props.task}/>
+
+                    }
+                </Space>
             </div>
-            <div>
-                {/*{"Статус: "}*/}
-                <Radio.Group value={status} onChange={(e) => handleStatusChange(e.target.value)}>
-                    <Radio.Button value="New">TO DO</Radio.Button>
-                    <Radio.Button value="InProgress">IN PROGRESS</Radio.Button>
-                    <Radio.Button value="Completed">COMPLETED</Radio.Button>
-                </Radio.Group>
-            </div>
-            <div>
-                {/*{showSave*/}
-                {/*    ? null*/}
-                {/*    : <Button onClick={() => setShowSave(true)}>Редактировать</Button>*/}
-                {/*}*/}
-                {showSave
-                    ? <Button onClick={submitUpdate}>Сохранить</Button>
-                    : null
+            <div style={{textAlign: "left", marginRight: "40%"}}>
+                <div style={{fontSize: 20}}>
+                    {`Срок выполнения: ${toDate(props.task.dueTo)}`}
+                </div>
+                <div style={{fontSize: 20}}>
+                    Статус: {prettyStatus()}
+                </div>
+                <div style={{fontSize: 20}}>Описание:</div>
+                {editMode
+                    ? <TextArea style={{whitespace: "pre-wrap", borderRadius: "10px"}} rows={4}
+                                placeholder="Описание задачи"
+                                name="description"
+                                autoComplete="off"
+                                value={description}
+                                onChange={(e) => setDescription(e.target.value)}/>
+                    : <Paragraph style={{whiteSpace: "pre-wrap"}}>{description}</Paragraph>
                 }
-                {props.task.readOnly
-                    ? null
-                    : <Button onClick={handleDelete}>Удалить</Button>
-                }
-                {feedbackClicked
-                    ? <div>
-                        {usersLoaded
-                            ? <div><Select defaultValue={usersForFeedback[0].userEmail} onChange={handleSelectedUser}>
-                                {usersForFeedback.map(user => {
-                                    return <Option value={user.userEmail}>{user.userEmail}</Option>
-                                })}
-                            </Select>
-                            <Button onClick={requestFeedback}>Подтвердить</Button>
-                            <Button onClick={() => setFeedbackClicked(false)}>Закрыть</Button>
-                            </div>
-                            : <LoadingIndicator/>
-                        }
-                        {/*<Select onChange={handleSelectedUser}>*/}
-                        {/*    {usersForFeedback.map(user => {*/}
-                        {/*        <Option value={user.userEmail}>{user.userEmail}</Option>*/}
-                        {/*    })}*/}
-                        {/*</Select>*/}
-                        {/*<Button onClick={requestFeedback}>Подтвердить</Button>*/}
-                    </div>
-                    : <Button onClick={handleFeedbackClicked}>Запросить фидбек</Button>
-                }
-                {props.task.feedbackRequested
-                    ? <div>
-                        Оставьте обратную связь!
-                        <Form>
-                            <Form.Item>
-                                <Input
-                                    placeholder="Обратная связь"
-                                    name="feedback"
-                                    value={feedback}
-                                    onChange={(e) => setFeedback(e.target.value)}
-                                />
-                            </Form.Item>
-                            <Button onClick={sendFeedback}>Сохранить</Button>
-                        </Form>
-                    </div>
-                    : null
+                <div style={{fontSize: 20}}>Критерии приема:</div>
+                {editMode
+                    ? <TextArea style={{whitespace: "pre-wrap", borderRadius: "10px"}} rows={4}
+                                placeholder="Критерии приема"
+                                name="acceptanceCriteria"
+                                autoComplete="off"
+                                value={acceptanceCriteria}
+                                onChange={(e) => setAcceptanceCriteria(e.target.value)}/>
+                    : <Paragraph style={{whiteSpace: "pre-wrap"}}>{acceptanceCriteria}</Paragraph>
                 }
             </div>
         </div>
