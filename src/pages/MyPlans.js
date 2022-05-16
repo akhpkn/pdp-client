@@ -1,8 +1,12 @@
 import React, {useEffect, useState} from 'react';
 import PlanList from "../components/PlanList";
 import PlanService from "../api/PlanService";
-import {notification} from "antd";
+import {notification, Result} from "antd";
 import LoadingIndicator from "../common/LoadingIndicator";
+import NewPlan from "../plan/NewPlan";
+
+import "./MyPlans.css"
+import {InfoCircleOutlined} from "@ant-design/icons";
 
 const MyPlans = () => {
 
@@ -27,18 +31,36 @@ const MyPlans = () => {
             })
     }
 
+    const [fetchState, setFetchState] = useState(0)
+
+    const needRefresh = () => {
+        setFetchState(fetchState + 1)
+    }
+
     useEffect(() => {
         fetchPlans()
-    }, [])
+    }, [fetchState])
 
     return (
-        <div>
-            {isLoading
-                ? <LoadingIndicator/>
-                : <div>
-                    <PlanList plans={plans} title="Мои планы развития"/>
+        <div style={{ marginTop: "30px"}} >
+            {isLoading && <LoadingIndicator/>}
+            {!isLoading && plans.length > 0 &&
+                <div className="plans-container">
+                    <PlanList owned={true} plans={plans} setChanged={needRefresh} title="Мои планы развития"/>
+                    <div style={{marginLeft: "auto"}}>
+                        <NewPlan setChanged={needRefresh}/>
+                    </div>
                 </div>
             }
+            {!isLoading && plans.length === 0 &&
+                <div style={{textAlign: "center"}}>
+                <Result icon={<InfoCircleOutlined/>} title="Создайте свой первый индивидуальный план развития!"/>
+                    <div style={{marginLeft: "auto", marginRight: "0 auto"}}>
+                        <NewPlan setChanged={needRefresh}/>
+                    </div>
+                </div>
+            }
+
         </div>
     );
 };

@@ -1,0 +1,15 @@
+.signin-content {
+    /*margin: 0 auto;*/
+    /*max-width: 600px;*/
+    /*margin-top: 10px;*/
+    margin: 0 auto;
+    max-width: 600px;
+    text-align: center;
+    /*border-radius: 20px;*/
+    border: 1px ridge #c5cad3;
+    margin-top: 10%;
+    justify-content: center;
+    align-content: center;
+    border-radius: 20px;
+    box-shadow: 0 2px 2px 0 rgba(0,0,0,0.16), 0 0 0 1px rgba(0,0,0,0.08);
+}

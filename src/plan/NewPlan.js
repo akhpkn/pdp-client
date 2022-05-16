@@ -1,17 +1,20 @@
 import React, {useState} from 'react';
-import {Form, Input, Button, DatePicker, Layout, notification} from "antd"
+import {Button, DatePicker, Form, Input, Layout, Modal, notification} from "antd"
 import moment from "moment";
 import PlanService from "../api/PlanService";
+
+import "./NewPlan.css"
+
 const FormItem = Form.Item;
-const { TextArea } = Input
+const {TextArea} = Input
 const {Content} = Layout
 
-const NewPlan = () => {
+const NewPlan = (props) => {
 
     const dateFormat = "YYYY-MM-DD"
 
     const [title, setTitle] = useState("")
-    const [dueDate, setDueDate] = useState(moment())
+    const [dueDate, setDueDate] = useState('')
 
     const handleSubmit = () => {
         console.log("Создаю план")
@@ -26,6 +29,8 @@ const NewPlan = () => {
         }
         PlanService.createPlan(request)
             .then(response => {
+                clearState()
+                props.setChanged()
                 notification.success({
                     message: "PDP",
                     description: "План успешно создан!"
@@ -39,31 +44,46 @@ const NewPlan = () => {
             })
     }
 
+    const clearState = () => {
+        setTitle('')
+        setDueDate('')
+        setShowForm(false)
+    }
+
+    const [showForm, setShowForm] = useState(false)
+
     return (
         <div>
-            <Content>
-            <Form>
-                <FormItem>
-                    <TextArea
-                        placeholder="Введите название плана развития"
-                        name="title"
-                        value={title}
-                        onChange={(e) => setTitle(e.target.value)}/>
-                </FormItem>
-                Выберите дату завершения
-                <FormItem>
-                    <DatePicker
-                        format={dateFormat}
-                        defaultValue={dueDate}
-                        value={dueDate}
-                        onChange={(e) => setDueDate(e)}
-                    />
-                </FormItem>
-            </Form>
-            <Button onClick={handleSubmit} type="primary">Button</Button>
-            </Content>
+            <Button type="primary" onClick={() => setShowForm(true)}>Создать план развития</Button>
+            <Modal
+                visible={showForm}
+                okText="Создать"
+                cancelText="Отменить"
+                onOk={handleSubmit}
+                onCancel={clearState}>
+                <Form layout={"horizontal"} style={{marginTop: "10px"}} labelCol={{span: 7}} wrapperCol={{span: 14}}>
+                    <FormItem label="Название">
+                        <Input
+                            placeholder="Введите название плана развития"
+                            name="title"
+                            autoComplete="off"
+                            value={title}
+                            onChange={(e) => setTitle(e.target.value)}/>
+                    </FormItem>
+                    <FormItem label="Дата завершения">
+                        <DatePicker
+                            placeholder="Выберите дату"
+                            style={{width: 150}}
+                            format={dateFormat}
+                            defaultValue={dueDate}
+                            value={dueDate}
+                            disabledDate={d => !d || d.isBefore(moment())}
+                            onChange={(e) => setDueDate(e)}/>
+                    </FormItem>
+                </Form>
+            </Modal>
         </div>
-    );
+);
 };
 
 export default NewPlan;

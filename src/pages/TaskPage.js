@@ -6,17 +6,21 @@ import CommentService from "../api/CommentService";
 import LoadingIndicator from "../common/LoadingIndicator";
 import Task from "../components/Task";
 import Comment from "../components/Comment";
-import {Button, Form, Input} from "antd";
+import {Badge, Button, Form, Input, Tabs, Tooltip} from "antd";
+import Feedback from "../components/Feedback";
+import FeedbackService from "../api/FeedbackService";
+import Comments from "../components/Comments";
+import Feedbacks from "../components/Feedbacks";
+import Task3 from "../components/Task3";
+
+const {TabPane} = Tabs
 
 const TaskPage = () => {
 
     const params = useParams()
 
     const [task, setTask] = useState({})
-    const [comments, setComments] = useState([])
-
     const [taskLoading, setTaskLoading] = useState(true)
-    const [commentsLoading, setCommentsLoading] = useState(true)
 
     const [fetchState, setFetchState] = useState(0)
 
@@ -39,71 +43,39 @@ const TaskPage = () => {
             })
     }
 
-    const fetchComments = () => {
-        CommentService.getByTask(params.id)
-            .then(response => {
-                console.log(response)
-                setComments(response)
-                setCommentsLoading(false)
-            })
-            .catch(error => {
-                setComments([])
-                setCommentsLoading(false)
-                NotificationComponent.error(error.message)
-            })
-    }
-
-    const [newComment, setNewComment] = useState('')
-
-    const addNewComment = () => {
-        const request = {
-            text: newComment,
-            taskId: task.id
-        }
-        CommentService.create(request)
-            .then(response => {
-                NotificationComponent.success("Комментарий добавлен!")
-                needRefresh()
-                setNewComment('')
-            })
-            .catch(error => {
-                NotificationComponent.error(error.message)
-            })
-    }
-
-    useEffect( () => {
+    useEffect(() => {
         console.log("Fetching data from backend")
         fetchTask()
-        fetchComments()
+        // fetchComments()
     }, [fetchState])
 
     return (
-        <div>
+        //style={{marginTop: "30px", marginLeft: "80px", marginRight: "60px"}}
+        <div style={{marginTop: "30px", marginLeft: "10px"}}>
             {taskLoading
                 ? <LoadingIndicator/>
-                : <Task task={task} setChanged={needRefresh}/>
+                : <Task3 task={task} setChanged={needRefresh}/>
             }
-            <h1>Комментарии</h1>
-            {commentsLoading
-                ? <LoadingIndicator/>
-                : <div>
-                    {comments.map(comment =>
-                        <Comment comment={comment} setChanged={needRefresh} key={comment.id}/>
-                    )}
-                  </div>
-            }
-            <h1>Добавить комментарий</h1>
-            <Form>
-                <Form.Item>
-                    <Input
-                        placeholder="Введите текст"
-                        name="comment"
-                        value={newComment}
-                        onChange={(e) => setNewComment(e.target.value)}
-                    />
-                </Form.Item>
-                <Button onClick={addNewComment}>Сохранить</Button>
-            </Form>
+            <Tabs defaultActiveKey={'none'}>
+                <TabPane tab="Комментарии" key="Комментарии">
+                    {!taskLoading && <Comments task={task}/>
+                    }
+                </TabPane>
+                <TabPane
+                    tab={task.feedbackRequested
+                        ? <Tooltip title={"Оставьте обратную связь!"}>
+                            <Badge dot>
+                                Обратная связь
+                            </Badge>
+                        </Tooltip>
+                        : "Обратная связь"
+                    }
+                    key="Обратная связь">
+                    {!taskLoading &&
+                        <Feedbacks setChanged={needRefresh} task={task}/>
+                    }
+                </TabPane>
+            </Tabs>
         </div>
     );
 };

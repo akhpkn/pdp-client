@@ -30,4 +30,22 @@ export default class PlanService {
             body: JSON.stringify(planCreationRequest)
         })
     }
+
+    static updateTitle(id, title) {
+        const request = {
+            title: title
+        }
+        return requestWithoutResponse({
+            url: ApiBaseUrl + `/api/v1/plan/${id}`,
+            method: 'PUT',
+            body: JSON.stringify(request)
+        })
+    }
+
+    static delete(id) {
+        return requestWithoutResponse({
+            url: ApiBaseUrl + `/api/v1/plan/${id}`,
+            method: 'DELETE'
+        })
+    }
 }

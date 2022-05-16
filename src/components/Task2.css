@@ -1,0 +1,25 @@
+.task-content {
+    margin-bottom: 30px;
+    padding: 20px 15px 20px 15px;
+    letter-spacing: .01em;
+    box-shadow: 0 2px 2px 0 rgba(0,0,0,0.16), 0 0 0 1px rgba(0,0,0,0.08);
+    border-radius: 10px;
+    /*border-width: 10px;*/
+    /*border-color: #282c34;*/
+    border: 1px ridge #c5cad3;
+}
+
+/*border: "1px ridge #c5cad3", boxShadow: "0 2px 2px 0 rgba(0,0,0,0.16), 0 0 0 1px rgba(0,0,0,0.08)", borderRadius: "10px"*/
+
+.task-header {
+    display: flex;
+    align-items: flex-start;
+    align-content: center;
+}
+
+.task-info {
+    /*display: flex;*/
+    /*margin-left: 20px;*/
+    align-content: flex-start;
+    text-align: left;
+}

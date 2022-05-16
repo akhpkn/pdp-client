@@ -1,5 +1,18 @@
-import React, {useEffect, useState} from 'react';
-import {Button, DatePicker, Form, Input, Mentions, notification, Select} from "antd";
+import React, {useEffect, useRef, useState} from 'react';
+import {
+    Button,
+    DatePicker,
+    Form,
+    Input,
+    Mentions,
+    Modal,
+    notification,
+    Result,
+    Select,
+    Space,
+    Tag,
+    Typography
+} from "antd";
 import Task from "../components/Task";
 import {useNavigate, useParams} from "react-router-dom";
 import PlanService from "../api/PlanService";
@@ -11,8 +24,19 @@ import moment from "moment";
 import TaskAuditService from "../api/TaskAuditService";
 import NotificationComponent from "../common/NotificationComponent";
 import TimeUtil from "../common/TimeUtil";
+import Task2 from "../components/Task2";
+
+import "./MyPlans.css"
+import "./PlanPage.css"
+import NewTask from "../components/NewTask";
+import ShareForm from "../components/ShareForm";
+import TasksHistory from "../components/TasksHistory";
+import {ClockCircleOutlined, InfoCircleOutlined} from "@ant-design/icons";
+import AccessList from "../components/AccessList";
 
 const { Option } = Mentions;
+const { TextArea } = Input
+
 
 const PlanPage = () => {
 
@@ -30,15 +54,13 @@ const PlanPage = () => {
     const [auditLoading, setAuditLoading] = useState(true)
 
     const [fetchState, setFetchState] = useState(0)
-    // const plan = {
-    //     title: "Мой план",
-    // }
     const fetchPlan = () => {
         PlanService.getPlan(params.id)
             .then(response => {
                 console.log(response)
                 setPlan(response)
                 setPlanLoading(false)
+                setTitle(response.title)
                 return response
             })
             .catch(error => {
@@ -90,206 +112,76 @@ const PlanPage = () => {
         fetchAudit()
     }, [fetchState])
 
-    // console.log("Tasks:")
-    // console.log(tasks)
-    // const [tasks, setTasks] = useState([])
-
-    const [newTaskTitle, setNewTaskTitle] = useState("")
-    const [newTaskDescription, setNewTaskDescription] = useState("")
-    const [newTaskAcceptanceCriteria, setNewTaskAcceptanceCriteria] = useState("")
-    const dateFormat = "YYYY-MM-DD"
-    const [dueDate, setDueDate] = useState(moment())
-
-    const addNewTask = () => {
-        const request = {
-            title: newTaskTitle,
-            description: newTaskDescription,
-            acceptanceCriteria: newTaskAcceptanceCriteria,
-            planId: params.id,
-            dueTo: `${dueDate.format(dateFormat)}T12:00:00.00Z`
-        }
-        console.log(fetchState)
-        TaskService.createTask(request)
-            .then(response => {
-                notification.success({
-                    message: "PDP",
-                    description: "Таск успешно создан"
-                })
-                needRefresh()
-                console.log(fetchState)
-            })
-            .catch(error => {
-                console.log(error)
-                console.log(error.message)
-                notification.error({
-                    message: "PDP",
-                    description: error.message
-                })
-                needRefresh()
-                console.log(fetchState)
-            })
-    }
-
     const needRefresh = () => {
         console.log("Need refresh")
         setFetchState(fetchState + 1)
     }
 
-    const [shareClicked, setShareClicked] = useState(false)
+    const [editMode, setEditMode] = useState(false)
 
-    const handleShareButtonClick = () => {
-        setShareClicked(true)
+    const [title, setTitle] = useState('')
+
+    const cancelEdit = () => {
+        setEditMode(false)
+        setTitle(plan.title)
     }
 
-    const [users, setUsers] = useState([])
-    const [usersLoading, setUsersLoading] = useState(false)
-
-    const loadUsersByEmail = (email) => {
-        setUsersLoading(true)
-        setUsers([])
-        UserService.loadUsersByEmail(email)
-            .then(response => {
-                console.log(response)
-                setUsers(response)
-                setUsersLoading(false)
+    const submitEdit = () => {
+        PlanService.updateTitle(plan.id, title)
+            .then(() => {
+                NotificationComponent.success("Название изменено!")
+                setEditMode(false)
+                needRefresh()
             })
-            .catch(error => {
-                notification.error({
-                    message: "PDP",
-                    description: error.message
-                })
-                setUsers([])
-                setUsersLoading(false)
-            })
+            .catch(error => NotificationComponent.error(error.message))
     }
-
-    const sharePlan = (userId) => {
-        const request = {
-            planId: plan.id,
-            userId: userId,
-            type: accessType
-        }
-        SharingService.share(request)
-            .then(response => {
-                notification.success({
-                    message: "PDP",
-                    description: "Вы поделились планом развития"
-                })
-            })
-            .catch(error => {
-                notification.error({
-                    message: "PDP",
-                    description: error.message
-                })
-            })
-    }
-
-    const submitShare = () => {
-        setShareClicked(false)
-        sharePlan(selectedUserIdForShare)
-    }
-
-    const handleShareClose = () => {
-      setShareClicked(false)
-    }
-
-    const onSearch = search => {
-        loadUsersByEmail(search)
-    }
-
-    const [selectedUserIdForShare, setSelectedUserIdForShare] = useState("")
-
-    const onSelect = (option, prefix) => {
-        console.log(option)
-        console.log(prefix)
-        setSelectedUserIdForShare(option.key)
-    }
-
-    const [accessType, setAccessType] = useState("Read")
 
     return (
-        <div>
+        //style={{marginTop: "30px", marginLeft: "80px", marginRight: "60px"}}
+        //style={{marginTop: "30px", marginLeft: "80px", marginRight: "40px"}}
+        <div style={{marginTop: "30px", marginLeft: "10px"}}>
             {planLoading
                 ? <LoadingIndicator/>
-                : <h1>{plan.title}</h1>
-            }
-            {shareClicked
-                ? <div>
-                    <Mentions loading={usersLoading} onSearch={onSearch} onSelect={onSelect}>
-                        {users.map(user =>
-                            <Option key={user.id} value={user.email}>
-                                <span>{user.email}</span>
-                            </Option>
-                        )
+                : <div className="plan-header">
+                    {editMode
+                        ? <Input
+                            style={{borderRadius: "10px", fontSize: "38px", maxWidth: "40%"}}
+                            placeholder="Название задачи"
+                            name="feedback"
+                            value={title}
+                            onChange={(e) => setTitle(e.target.value)}/>
+                        : <Typography.Title editable={{triggerType:"text"}} style={{textAlign: "left",maxWidth: "40%"}}>{plan.title}</Typography.Title>
+                    }
+                    {/*<Typography.Title >{plan.title}</Typography.Title>*/}
+                    {/*<Tag color="default" icon={<ClockCircleOutlined/>}>{TimeUtil.toDate(plan.dueTo)}</Tag>*/}
+                    {/*<div style={{marginLeft: "auto"}}>Дата создания: {TimeUtil.toDate(plan.createDt)}</div>*/}
+                    {/*<div style={{marginLeft: "auto"}}>Дата завершения: {TimeUtil.toDate(plan.dueTo)}</div>*/}
+                    <Space style={{marginLeft: "auto"}}>
+                        {!editMode && (plan.accessType ==='Write' || plan.accessType ==='Owner') &&
+                            <Button onClick={() => setEditMode(true)}>Редактировать</Button>
                         }
-                    </Mentions>
-                <Select defaultValue="Read" onChange={setAccessType}>
-                    <Option value="Read">Чтение</Option>
-                    <Option value="Write">Запись</Option>
-                </Select>
-                <Button onClick={submitShare}>Подтвердить</Button>
-                <Button onClick={handleShareClose}>Закрыть</Button>
+                        {editMode && <Button type="primary" onClick={submitEdit}>Сохранить</Button>}
+                        {editMode && <Button onClick={cancelEdit}>Отменить</Button>}
+                        {plan.accessType ==='Owner' && <AccessList plan={plan}/>}
+                        {plan.accessType==='Owner' && <ShareForm plan={plan}/>}
+                        <TasksHistory plan={plan}/>
+                        <NewTask plan={plan} setChanged={needRefresh}/>
+                    </Space>
                 </div>
-                : null
             }
-            <Button onClick={handleShareButtonClick}>Поделиться</Button>
-            <h1>Задачи</h1>
             {tasksLoading
                 ? <LoadingIndicator/>
-                : <div>
+                : <div style={{maxWidth: "700px", marginTop: "10px"}}>
                     {tasks.map(task =>
                         <div>
-                            <Task task={task} setChanged={needRefresh} key={task.id}/>
-                            <Button onClick={() => navigate(`/task/${task.id}`)}>
-                                 Раскрыть
-                             </Button>
+                            <Task2 task={task} setChanged={needRefresh} key={task.id}/>
                         </div>
                     )}
                 </div>
             }
-            <h1>История изменений</h1>
-            {auditLoading
-                ? <LoadingIndicator/>
-                : <div>
-                    {audit.map(event =>
-                        <div>{` ${TimeUtil.toDateTimeWithMs(event.dateTime)} Задача ${event.taskTitle} в статусе ${event.status}`}</div>
-                    )}
-                </div>
+            {!tasksLoading && tasks.length === 0 &&
+                <Result icon={<InfoCircleOutlined/>} title="Создайте задачи!"/>
             }
-            <h1>Создать задачу</h1>
-            <Form>
-                <Form.Item>
-                    <Input
-                        placeholder="Название задачи"
-                        name="title"
-                        value={newTaskTitle}
-                        onChange={(e) => setNewTaskTitle(e.target.value)}/>
-                </Form.Item>
-                <Form.Item>
-                    <Input
-                        placeholder="Описание задачи"
-                        name="description"
-                        value={newTaskDescription}
-                        onChange={(e) => setNewTaskDescription(e.target.value)}/>
-                </Form.Item>
-                <Form.Item>
-                    <Input
-                        placeholder="Критерии приема"
-                        name="acceptanceCriteria"
-                        value={newTaskAcceptanceCriteria}
-                        onChange={(e) => setNewTaskAcceptanceCriteria(e.target.value)}/>
-                </Form.Item>
-                Срок завершения
-                <Form.Item>
-                    <DatePicker
-                        format={dateFormat}
-                        defaultValue={dueDate}
-                        value={dueDate}
-                        onChange={(e) => setDueDate(e)}
-                    />
-                </Form.Item>
-                <Button onClick={addNewTask}>Сохранить</Button>
-            </Form>
         </div>
     );
 };

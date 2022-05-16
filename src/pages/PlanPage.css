@@ -1,0 +1,6 @@
+.plan-header {
+    /*display:;*/
+    align-content: center;
+    align-items: baseline;
+    display: flex;
+}

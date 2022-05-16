@@ -1,7 +1,12 @@
-import React, {useState} from 'react';
+import React, {useContext, useState} from 'react';
 import {Form, Input, Button, DatePicker, Layout, notification} from "antd"
 import AuthService from "../api/AuthService";
 import {AccessToken} from "../api/ApiUtils";
+
+import "./Signin.css"
+import {AuthContext} from "../context";
+import {useNavigate} from "react-router-dom";
+
 const FormItem = Form.Item;
 const { TextArea } = Input
 
@@ -9,6 +14,10 @@ const Signin = () => {
 
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
+
+    const {isAuth, setIsAuth} = useContext(AuthContext)
+
+    const navigate = useNavigate()
 
     const handleSignIn = () => {
         const signInRequest = {
@@ -19,6 +28,8 @@ const Signin = () => {
             .then(response => {
                 console.log(response)
                 localStorage.setItem(AccessToken, response.token)
+                setIsAuth(true)
+                navigate('/plans')
             })
             .catch(error =>{
                 notification.error({
@@ -29,23 +40,25 @@ const Signin = () => {
     }
 
     return (
-        <div>
-            <Form>
-                <FormItem>
-                    <TextArea
+        <div className="signin-content">
+            <Form style={{marginTop: "30px"}} labelCol={{span: 4}} wrapperCol={{span: 16}}>
+                <FormItem label="Email">
+                    <Input
                         placeholder="email"
                         name="email"
+                        autoComplete="off"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}/>
                 </FormItem>
-                <FormItem>
+                <FormItem label="Пароль">
                     <Input.Password
                         placeholder="Пароль"
                         name="password"
+                        autoComplete="off"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}/>
                 </FormItem>
-                <Button onClick={handleSignIn}>Sign In</Button>
+                <Button style={{marginBottom: "30px"}} type="primary" onClick={handleSignIn}>Войти</Button>
             </Form>
         </div>
     );

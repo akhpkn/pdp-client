@@ -1,10 +1,14 @@
 import React, {useState} from 'react';
-import {Button, Layout, notification, Radio, Select, Typography} from "antd";
+import {Button, Form, Input, Layout, notification, Radio, Select, Typography} from "antd";
 import {DeleteOutlined} from "@ant-design/icons"
 import TaskService from "../api/TaskService";
 import {Content} from "antd/es/layout/layout";
 import Paragraph from "antd/es/typography/Paragraph";
 import moment from "moment";
+import SharingService from "../api/SharingService";
+import NotificationComponent from "../common/NotificationComponent";
+import LoadingIndicator from "../common/LoadingIndicator";
+import FeedbackService from "../api/FeedbackService";
 
 const {Option} = Select;
 
@@ -131,6 +135,64 @@ const Task = (props) => {
         return moment.unix(instant).format("YYYY-MM-DD")
     }
 
+    const [feedbackClicked, setFeedbackClicked] = useState(false)
+    const [usersForFeedback, setUsersForFeedback] = useState([])
+    const [usersLoaded, setUsersLoaded] = useState(false)
+    const [selectedUser, setSelectedUser] = useState({})
+
+    const handleFeedbackClicked = () => {
+        SharingService.getUsersWithAccess(props.task.planId)
+            .then(response => {
+                setUsersForFeedback(response)
+                setFeedbackClicked(true)
+                setUsersLoaded(true)
+                setSelectedUser(response[0])
+                console.log(response)
+                console.log(usersForFeedback)
+            })
+            .catch(error => {
+                NotificationComponent.error(error.message)
+            })
+    }
+
+    const handleSelectedUser = (uEmail) => {
+        const user = usersForFeedback.find(user => user.userEmail === uEmail)
+        setSelectedUser(user)
+    }
+
+    const requestFeedback = () => {
+        setFeedbackClicked(false)
+        console.log(`Requesting feedback from ${selectedUser.userId} ${selectedUser.userEmail}`)
+        const request = {
+            assigneeId: selectedUser.userId,
+            taskId: props.task.id
+        }
+        FeedbackService.requestNew(request)
+            .then(response => {
+                NotificationComponent.success(`Запрошен фидбек у ${selectedUser.userName} ${selectedUser.userSurname}`)
+            })
+            .catch(error => {
+                NotificationComponent.error(error.message)
+            })
+    }
+
+    const [feedback, setFeedback] = useState("")
+    
+    const sendFeedback = () => {
+        console.log(`Sending feedback [${feedback}]`)
+        const request = {
+            requestId: props.task.feedbackRequestId,
+            text: feedback
+        }
+        FeedbackService.send(request)
+            .then(response => {
+                NotificationComponent.success("Фидбек оправлен")
+            })
+            .catch(error => {
+                NotificationComponent.error(error.message)
+            })
+    }
+
     return (
         <div>
             {props.task.readOnly
@@ -172,6 +234,45 @@ const Task = (props) => {
                 {props.task.readOnly
                     ? null
                     : <Button onClick={handleDelete}>Удалить</Button>
+                }
+                {feedbackClicked
+                    ? <div>
+                        {usersLoaded
+                            ? <div><Select defaultValue={usersForFeedback[0].userEmail} onChange={handleSelectedUser}>
+                                {usersForFeedback.map(user => {
+                                    return <Option value={user.userEmail}>{user.userEmail}</Option>
+                                })}
+                            </Select>
+                            <Button onClick={requestFeedback}>Подтвердить</Button>
+                            <Button onClick={() => setFeedbackClicked(false)}>Закрыть</Button>
+                            </div>
+                            : <LoadingIndicator/>
+                        }
+                        {/*<Select onChange={handleSelectedUser}>*/}
+                        {/*    {usersForFeedback.map(user => {*/}
+                        {/*        <Option value={user.userEmail}>{user.userEmail}</Option>*/}
+                        {/*    })}*/}
+                        {/*</Select>*/}
+                        {/*<Button onClick={requestFeedback}>Подтвердить</Button>*/}
+                    </div>
+                    : <Button onClick={handleFeedbackClicked}>Запросить фидбек</Button>
+                }
+                {props.task.feedbackRequested
+                    ? <div>
+                        Оставьте обратную связь!
+                        <Form>
+                            <Form.Item>
+                                <Input
+                                    placeholder="Обратная связь"
+                                    name="feedback"
+                                    value={feedback}
+                                    onChange={(e) => setFeedback(e.target.value)}
+                                />
+                            </Form.Item>
+                            <Button onClick={sendFeedback}>Сохранить</Button>
+                        </Form>
+                    </div>
+                    : null
                 }
             </div>
         </div>

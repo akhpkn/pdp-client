@@ -9,6 +9,13 @@ export default class UserService {
         })
     }
 
+    static userExists(email) {
+        return request({
+            url: ApiBaseUrl + `/api/v1/user/exists?email=${email}`,
+            method: 'GET'
+        })
+    }
+
     static getProfile() {
         return request({
             url: ApiBaseUrl + "/api/v1/user/profile",

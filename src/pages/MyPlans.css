@@ -1,0 +1,9 @@
+.plans-container {
+    margin: 0 auto;
+    margin-top: 20px;
+    margin-left: 20px;
+    margin-right: 20px;
+    /*max-width: 800px;*/
+    align-items: flex-start;
+    display: flex
+}
