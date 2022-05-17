@@ -53,7 +53,7 @@ const TaskPage = () => {
                 ? <LoadingIndicator/>
                 : <Task task={task} setChanged={needRefresh}/>
             }
-            <Tabs defaultActiveKey={'none'}>
+            <Tabs style={{marginRight: "50%"}} defaultActiveKey={'none'}>
                 <TabPane tab="Комментарии" key="Комментарии">
                     {!taskLoading && <Comments task={task}/>
                     }

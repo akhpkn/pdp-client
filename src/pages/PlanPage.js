@@ -146,10 +146,11 @@ const PlanPage = () => {
                         }
                         {editMode && <Button disabled={title === ''} type="primary" onClick={submitEdit}>Сохранить</Button>}
                         {editMode && <Button onClick={cancelEdit}>Отменить</Button>}
+                        {(plan.accessType === 'Write' || plan.accessType === 'Owner') && <NewTask plan={plan} setChanged={needRefresh}/>}
                         {plan.accessType ==='Owner' && <AccessList plan={plan}/>}
                         {plan.accessType ==='Owner' && <ShareForm plan={plan}/>}
                         <TasksHistory plan={plan}/>
-                        {(plan.accessType === 'Write' || plan.accessType === 'Owner') && <NewTask plan={plan} setChanged={needRefresh}/>}
+                        {/*{(plan.accessType === 'Write' || plan.accessType === 'Owner') && <NewTask plan={plan} setChanged={needRefresh}/>}*/}
                     </Space>
                 </div>
             }

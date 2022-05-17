@@ -4,6 +4,7 @@ import TaskAuditService from "../api/TaskAuditService";
 import NotificationComponent from "../common/NotificationComponent";
 import LoadingIndicator from "../common/LoadingIndicator";
 import TimeUtil from "../common/TimeUtil";
+import {HistoryOutlined} from "@ant-design/icons";
 
 const TasksHistory = (props) => {
 
@@ -62,7 +63,7 @@ const TasksHistory = (props) => {
 
     return (
         <div>
-            <Button onClick={() => setShowHistory(true)}>История задач</Button>
+            <Button icon={<HistoryOutlined/>} onClick={() => setShowHistory(true)}></Button>
             <Drawer
                 visible={showHistory}
                 onClose={() => setShowHistory(false)}>

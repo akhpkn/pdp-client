@@ -50,7 +50,7 @@ const MyPlans = () => {
                 <div className="plans-container">
                     <PlanList owned={true} plans={plans} setChanged={needRefresh} title="Мои планы развития"/>
                     <div style={{marginLeft: "auto"}}>
-                        <NewPlan setChanged={needRefresh}/>
+                        <NewPlan isPrimary={false} setChanged={needRefresh}/>
                     </div>
                 </div>
             }
@@ -58,7 +58,7 @@ const MyPlans = () => {
                 <div style={{textAlign: "center"}}>
                 <Result icon={<InfoCircleOutlined/>} title="Создайте свой первый индивидуальный план развития!"/>
                     <div style={{marginLeft: "auto", marginRight: "0 auto"}}>
-                        <NewPlan setChanged={needRefresh}/>
+                        <NewPlan isPrimary={true} setChanged={needRefresh}/>
                     </div>
                 </div>
             }

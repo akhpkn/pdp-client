@@ -52,7 +52,10 @@ const NewPlan = (props) => {
 
     return (
         <div>
-            <Button type="primary" onClick={() => setShowForm(true)}>Создать план развития</Button>
+            {props.isPrimary
+                ? <Button type="primary" onClick={() => setShowForm(true)}>Создать план развития</Button>
+                : <Button onClick={() => setShowForm(true)}>Создать план развития</Button>
+            }
             <Modal
                 visible={showForm}
                 okText="Создать"
@@ -63,6 +66,7 @@ const NewPlan = (props) => {
                 <Form layout={"horizontal"} style={{marginTop: "10px"}} labelCol={{span: 7}} wrapperCol={{span: 14}}>
                     <FormItem label="Название">
                         <Input
+                            style={{borderRadius: "10px"}}
                             placeholder="Введите название плана развития"
                             name="title"
                             autoComplete="off"
@@ -73,7 +77,7 @@ const NewPlan = (props) => {
                         <DatePicker
                             allowClear={false}
                             placeholder="Выберите дату"
-                            style={{width: 150}}
+                            style={{width: 150, borderRadius: "10px"}}
                             format={dateFormat}
                             defaultValue={dueDate}
                             value={dueDate}

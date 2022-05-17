@@ -24,7 +24,7 @@ const Comments = (props) => {
                 // style={{border: "2px ridge #c5cad3", width: "auto"}}
                 avatar={<Avatar>{avatarTitle(comm)}</Avatar>}
                 author={`${comm.userName} ${comm.userSurname}`}
-                content={<Paragraph style={{whiteSpace: "pre-line", textAlign:"left", display: "flex", justifyContent: "flex-start"}}>{comm.text}</Paragraph>}
+                content={<Paragraph style={{whiteSpace: "pre-line", textAlign:"left", justifyContent: "flex-start"}}>{comm.text}</Paragraph>}
                 // content={<p style={{display: "flex"}}>{comm.text}</p>}
                 datetime={TimeUtil.toDateTime(comm.createDt)}/>}
         />
@@ -74,7 +74,7 @@ const Comments = (props) => {
     }, [fetchState])
 
     return (
-        <div style={{marginRight: "40%"}}>
+        <div>
             {commentsLoading && <LoadingIndicator/>
                 // : <CommentList comments={comments}/>
             }
@@ -87,6 +87,7 @@ const Comments = (props) => {
             <Form>
                 <Form.Item>
                     <TextArea rows={4}
+                              style={{borderRadius: "10px"}}
                               placeholder="Введите текст"
                               name="comment"
                               autoComplete="off"

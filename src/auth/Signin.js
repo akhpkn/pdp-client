@@ -26,7 +26,6 @@ const Signin = () => {
         }
         AuthService.signIn(signInRequest)
             .then(response => {
-                console.log(response)
                 localStorage.setItem(AccessToken, response.token)
                 setIsAuth(true)
                 navigate('/plans')
@@ -44,6 +43,7 @@ const Signin = () => {
             <Form style={{marginTop: "30px"}} labelCol={{span: 4}} wrapperCol={{span: 16}}>
                 <FormItem label="Email">
                     <Input
+                        style={{borderRadius: "10px"}}
                         placeholder="email"
                         name="email"
                         autoComplete="off"
@@ -52,6 +52,7 @@ const Signin = () => {
                 </FormItem>
                 <FormItem label="Пароль">
                     <Input.Password
+                        style={{borderRadius: "10px"}}
                         placeholder="Пароль"
                         name="password"
                         autoComplete="off"

@@ -75,8 +75,8 @@ const ProfilePage = () => {
     }
 
     return (
-        <div>
-            <div style={{textAlign: "left", marginLeft: "30px", marginTop: "30px"}}>
+        <div style={{marginLeft: "30px"}}>
+            <div style={{textAlign: "left", marginTop: "30px"}}>
                 <div style={{display: "flex", alignItems: "center"}}>
                 <Avatar size={70} style={{fontSize: 30}}>{avatarTitle(user)}</Avatar>
                 <Typography.Title style={{marginBottom: 0, marginLeft: "10px"}} level={2}>{user.name} {user.surname}</Typography.Title>
@@ -84,16 +84,16 @@ const ProfilePage = () => {
                 <Typography.Title style={{marginTop: "10px"}} level={2}>@{user.email}</Typography.Title>
             </div>
             {!editClicked
-                ? <div style={{textAlign: "left", marginLeft: "30px", fontSize: 25}}>
+                ? <div style={{textAlign: "left", fontSize: 25}}>
                     {/*<div>{`Имя: ${auth.name}`}</div>*/}
                     {/*<div>{`Фамилия: ${auth.surname}`}</div>*/}
                     {/*<div>{`Email: ${auth.email}`}</div>*/}
                 </div>
-                : <div style={{textAlign: "left", marginLeft: "30px", fontSize: 25}}>
+                : <div style={{textAlign: "left", fontSize: 25}}>
                     <Form style={{maxWidth: "300px", fontSize: 20}} labelCol={ {span: 6}} wrapperCol={{span: 16}}>
                         <Form.Item style={{fontSize: 20}} label="Имя">
                             <Input
-
+                                style={{borderRadius: "10px"}}
                                 // style={{marginLeft: "10px"}}
                                 autoComplete="off"
                                 placeholder="Введите имя"
@@ -103,6 +103,7 @@ const ProfilePage = () => {
                         <Form.Item label="Фамилия">
                             <Input
                                 // style={{marginLeft: "10px"}}
+                                style={{borderRadius: "10px"}}
                                 autoComplete="off"
                                 placeholder="Введите фамилию"
                                 defaultValue={surname}
@@ -113,7 +114,7 @@ const ProfilePage = () => {
                 </div>
             }
             {!editClicked
-                ? <Button style={{display: "flex", marginLeft: "30px", marginTop: "20px"}}
+                ? <Button style={{display: "flex", marginTop: "20px"}}
                           onClick={() => setEditClicked(true)}>
                     Редактировать
                 </Button>
@@ -124,7 +125,7 @@ const ProfilePage = () => {
                     </Space>
                 </div>
             }
-            <Tabs style={{marginLeft: "30px", display: "flex", marginRight: "40%"}}>
+            <Tabs style={{display: "flex", marginRight: "60%"}}>
                 <TabPane tab="Настройки напоминаний">
                     <NotificationSettings style={{display: "flex"}}/>
                 </TabPane>

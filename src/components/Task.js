@@ -136,7 +136,7 @@ const Task = (props) => {
                     }
                 </Space>
             </div>
-            <div style={{textAlign: "left", marginRight: "40%"}}>
+            <div style={{textAlign: "left", marginRight: "50%"}}>
                 <div style={{fontSize: 20}}>
                     {`Срок выполнения: ${toDate(props.task.dueTo)}`}
                 </div>

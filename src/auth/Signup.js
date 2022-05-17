@@ -148,6 +148,7 @@ const Signup = () => {
                     validateStatus={emailValidationStatus}
                     help={emailValidationMessage}>
                     <Input
+                        style={{borderRadius: "10px"}}
                         placeholder="email"
                         name="email"
                         autoComplete="off"
@@ -160,6 +161,7 @@ const Signup = () => {
                     validateStatus={nameValidationStatus}
                     help={nameValidationMessage}>
                     <Input
+                        style={{borderRadius: "10px"}}
                         placeholder="Имя"
                         name="name"
                         autoComplete="off"
@@ -172,6 +174,7 @@ const Signup = () => {
                     validateStatus={surnameValidationStatus}
                     help={surnameValidationMessage}>
                     <Input
+                        style={{borderRadius: "10px"}}
                         placeholder="Фамилия"
                         name="surname"
                         autoComplete="off"
@@ -184,6 +187,7 @@ const Signup = () => {
                     validateStatus={passwordValidationStatus}
                     help={passwordValidationMessage}>
                     <Input.Password
+                        style={{borderRadius: "10px"}}
                         placeholder="Пароль"
                         name="password"
                         autoComplete="off"

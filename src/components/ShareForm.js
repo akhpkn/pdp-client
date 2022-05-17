@@ -4,6 +4,8 @@ import UserService from "../api/UserService";
 import SharingService from "../api/SharingService";
 import NotificationComponent from "../common/NotificationComponent";
 
+import '../common/MySelect.css'
+import {ShareAltOutlined} from "@ant-design/icons";
 
 const {Option} = Mentions;
 
@@ -60,6 +62,12 @@ const ShareForm = (props) => {
 
     const submitShare = () => {
         sharePlan2(selectedUsersForShare)
+        clear()
+    }
+
+    const handleCancel = () => {
+        clear()
+        setShow(false)
     }
 
     const [show, setShow] = useState(false)
@@ -68,20 +76,25 @@ const ShareForm = (props) => {
 
     console.log(selectedUsersForShare)
 
+    const clear = () => {
+        setSelectedUsersForShare([])
+    }
+
     return (
         <div>
-            <Button onClick={() => setShow(true)}>Поделиться</Button>
+            <Button icon={<ShareAltOutlined/>} onClick={() => setShow(true)}></Button>
             <Modal
                 bodyStyle={{borderRadius: "30%"}}
                 visible={show}
-                okText="Подтвердить"
+                okText="Поделиться"
                 cancelText="Отменить"
                 okButtonProps={{disabled: (selectedUsersForShare.length === 0)}}
                 onOk={submitShare}
-                onCancel={() => setShow(false)}
+                onCancel={handleCancel}
             >
                 <Form style={{marginTop: "30px"}}>
                     <Form.Item label="Пользователи">
+                        {/*<div className="my-select-container">*/}
                         <Select
                             placeholder={"Введите email пользователя"}
                             labelInValue
@@ -93,12 +106,15 @@ const ShareForm = (props) => {
                             onSearch={onSearch}>
                             {options}
                         </Select>
+                        {/*</div>*/}
                     </Form.Item>
                     <Form.Item label="Уровень доступа">
-                        <Select defaultValue="Read" onChange={setAccessType}>
+                        {/*<div className="my-select-container">*/}
+                        <Select  defaultValue="Read" onChange={setAccessType}>
                             <Option value="Read">Чтение</Option>
                             <Option value="Write">Чтение и редактирование</Option>
                         </Select>
+                        {/*</div>*/}
                     </Form.Item>
                 </Form>
             </Modal>

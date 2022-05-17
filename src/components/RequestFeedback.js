@@ -58,7 +58,7 @@ const RequestFeedback = (props) => {
 
     return (
         <div>
-            <Button onClick={() => setShowModal(true)}>Запросить фидбек</Button>
+            <Button onClick={() => setShowModal(true)}>Запросить обратную связь</Button>
             <Modal
                 visible={showModal}
                 okText="Подтвердить"

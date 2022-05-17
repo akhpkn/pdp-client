@@ -7,10 +7,12 @@ import SharedPlans from "../pages/SharedPlans";
 import TaskPage from "../pages/TaskPage";
 import ProfilePage from "../pages/ProfilePage";
 import Logout from "../auth/Logout";
+import EntryPoint from "../auth/EntryPoint";
 
 export const publicRoutes = [
     {path: "/signup", component: Signup, exact: true},
     {path: "/signin", component: Signin, exact: true},
+    {path: "/", component: EntryPoint, exact: true}
 ]
 
 export const privateRoutes = [
@@ -20,5 +22,6 @@ export const privateRoutes = [
     {path: "/plan/:id", component: PlanPage, exact: true},
     {path: "/task/:id", component: TaskPage, exact: true},
     {path: "/profile", component: ProfilePage, exact: true},
-    {path: "/logout", component: Logout, exact: true}
+    {path: "/logout", component: Logout, exact: true},
+    {path: "/", component: EntryPoint, exact: true}
 ]

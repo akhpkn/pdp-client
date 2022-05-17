@@ -5,6 +5,8 @@ import {Button, Form, Modal, Select} from "antd";
 import LoadingIndicator from "../common/LoadingIndicator";
 import {CloseOutlined, DeleteOutlined} from "@ant-design/icons";
 
+import '../common/MySelect.css'
+
 const {Option} = Select
 
 const AccessList = (props) => {
@@ -89,7 +91,7 @@ const AccessList = (props) => {
                                     <Option value="Read">Чтение</Option>
                                     <Option value="Write">Чтение и редактирование</Option>
                                 </Select>
-                                <Button onClick={() => removeAccess(u)} style={{marginLeft: "10px"}} icon={<CloseOutlined/>}/>
+                                <Button onClick={() => removeAccess(u)} style={{marginLeft: "10px"}} icon={<DeleteOutlined/>}/>
                             </Form.Item>
                         })}
                     </Form>

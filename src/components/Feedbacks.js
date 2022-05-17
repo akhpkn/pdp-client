@@ -47,8 +47,8 @@ const Feedbacks = (props) => {
             renderItem={f => <Comment
                 avatar={<Avatar>{avatarTitle(f)}</Avatar>}
                 author={`${f.authorName} ${f.authorSurname}`}
-                content={<Paragraph style={{whiteSpace: "pre-line", textAlign:"left", display: "flex", justifyContent: "flex-start"}}>{f.text}</Paragraph>}
-                datetime={TimeUtil.toDateTimeWithMs(f.createDt)}/>
+                content={<Paragraph style={{whiteSpace: "pre-line", textAlign:"left", justifyContent: "flex-start"}}>{f.text}</Paragraph>}
+                datetime={TimeUtil.toDateTime(f.createDt)}/>
             }
         />
     )
@@ -76,7 +76,7 @@ const Feedbacks = (props) => {
     }
 
     return (
-        <div style={{marginRight: "40%"}}>
+        <div>
             {feedbacksLoading && <LoadingIndicator/>
                 // : <FeedbackList feedbacks={feedbacks}/>
             }
@@ -90,6 +90,7 @@ const Feedbacks = (props) => {
                 <Form>
                     <Form.Item>
                         <TextArea rows={4}
+                                  style={{borderRadius: "10px"}}
                                   placeholder="Введите текст"
                                   name="comment"
                                   autoComplete="off"
