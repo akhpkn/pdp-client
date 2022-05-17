@@ -30,6 +30,8 @@ const SharedPlans = () => {
         fetchPlans()
     }, [])
 
+    if (isLoading) return <LoadingIndicator/>
+
     return (
         <div style={{marginTop: "30px"}}>
             {isLoading

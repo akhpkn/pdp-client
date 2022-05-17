@@ -118,6 +118,8 @@ const PlanPage = () => {
             .catch(error => NotificationComponent.error(error.message))
     }
 
+    if (planLoading || tasksLoading) return <LoadingIndicator/>
+
     return (
         //style={{marginTop: "30px", marginLeft: "80px", marginRight: "60px"}}
         //style={{marginTop: "30px", marginLeft: "80px", marginRight: "40px"}}

@@ -44,6 +44,8 @@ const TaskPage = () => {
         // fetchComments()
     }, [fetchState])
 
+    if (taskLoading) return <LoadingIndicator/>
+
     return (
         //style={{marginTop: "30px", marginLeft: "80px", marginRight: "60px"}}
         <div style={{marginTop: "30px", marginLeft: "10px"}}>
