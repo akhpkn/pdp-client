@@ -128,7 +128,7 @@ const PlanPage = () => {
                     {editMode
                         ? <Input
                             style={{borderRadius: "10px", fontSize: "38px", maxWidth: "40%"}}
-                            placeholder="Название задачи"
+                            placeholder="Название плана развития"
                             name="feedback"
                             value={title}
                             onChange={(e) => setTitle(e.target.value)}/>
@@ -138,16 +138,16 @@ const PlanPage = () => {
                     {/*<Tag color="default" icon={<ClockCircleOutlined/>}>{TimeUtil.toDate(plan.dueTo)}</Tag>*/}
                     {/*<div style={{marginLeft: "auto"}}>Дата создания: {TimeUtil.toDate(plan.createDt)}</div>*/}
                     {/*<div style={{marginLeft: "auto"}}>Дата завершения: {TimeUtil.toDate(plan.dueTo)}</div>*/}
-                    <Space style={{marginLeft: "auto"}}>
+                    <Space style={{ marginLeft: "auto"}}>
                         {!editMode && (plan.accessType ==='Write' || plan.accessType ==='Owner') &&
                             <Button onClick={() => setEditMode(true)}>Редактировать</Button>
                         }
-                        {editMode && <Button type="primary" onClick={submitEdit}>Сохранить</Button>}
+                        {editMode && <Button disabled={title === ''} type="primary" onClick={submitEdit}>Сохранить</Button>}
                         {editMode && <Button onClick={cancelEdit}>Отменить</Button>}
                         {plan.accessType ==='Owner' && <AccessList plan={plan}/>}
-                        {plan.accessType==='Owner' && <ShareForm plan={plan}/>}
+                        {plan.accessType ==='Owner' && <ShareForm plan={plan}/>}
                         <TasksHistory plan={plan}/>
-                        <NewTask plan={plan} setChanged={needRefresh}/>
+                        {(plan.accessType === 'Write' || plan.accessType === 'Owner') && <NewTask plan={plan} setChanged={needRefresh}/>}
                     </Space>
                 </div>
             }

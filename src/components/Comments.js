@@ -94,7 +94,7 @@ const Comments = (props) => {
                               onChange={(e) => setNewComment(e.target.value)}/>
                 </Form.Item>
                 <Form.Item>
-                    <Button onClick={addComment}>Добавить комментарий</Button>
+                    <Button type='primary' disabled={newComment === ''} onClick={addComment}>Добавить комментарий</Button>
                 </Form.Item>
             </Form>
         </div>

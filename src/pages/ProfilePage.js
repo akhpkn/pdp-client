@@ -119,7 +119,7 @@ const ProfilePage = () => {
                 </Button>
                 : <div style={{display: "flex", marginLeft: "30px", marginTop: "20px"}}>
                     <Space>
-                    <Button type="primary" onClick={handleSave}>Сохранить</Button>
+                    <Button disabled={(name === '' || surname === '')} type="primary" onClick={handleSave}>Сохранить</Button>
                     <Button onClick={cancelEdit}>Отменить</Button>
                     </Space>
                 </div>

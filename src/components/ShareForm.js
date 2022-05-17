@@ -76,6 +76,7 @@ const ShareForm = (props) => {
                 visible={show}
                 okText="Подтвердить"
                 cancelText="Отменить"
+                okButtonProps={{disabled: (selectedUsersForShare.length === 0)}}
                 onOk={submitShare}
                 onCancel={() => setShow(false)}
             >

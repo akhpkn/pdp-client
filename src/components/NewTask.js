@@ -54,7 +54,13 @@ const NewTask = (props) => {
     return (
         <div>
             <Button onClick={() => setShowCreateTask(!showCreateTask)}>Создать задачу</Button>
-            <Modal okText="Создать" cancelText="Отменить" visible={showCreateTask} onCancel={() => setShowCreateTask(false)} onOk={() => {addNewTask(); setShowCreateTask(false)}}>
+            <Modal
+                okText="Создать"
+                cancelText="Отменить"
+                visible={showCreateTask}
+                okButtonProps={{disabled: (newTaskTitle === '' || dueDate === '')}}
+                onCancel={() => setShowCreateTask(false)}
+                onOk={() => {addNewTask(); setShowCreateTask(false)}}>
                 <Form style={{marginTop: "30px"}} labelCol={{span: 7}} wrapperCol={{span: 16}}>
                     <Form.Item label="Название">
                         <Input
@@ -81,10 +87,10 @@ const NewTask = (props) => {
                                   value={newTaskAcceptanceCriteria}
                                   onChange={(e) => setNewTaskAcceptanceCriteria(e.target.value)}/>
                     </Form.Item>
-                    {/*Срок завершения*/}
                     <Form.Item label="Срок завершения">
                         <DatePicker
                             placeholder="Выберите дату"
+                            allowClear={false}
                             style={{width: 150, borderRadius: "10px"}}
                             format={dateFormat}
                             defaultValue={dueDate}

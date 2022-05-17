@@ -97,7 +97,7 @@ const Feedbacks = (props) => {
                                   onChange={(e) => setNewFeedback(e.target.value)}/>
                     </Form.Item>
                     <Form.Item>
-                        <Button onClick={sendFeedback}>Отправить</Button>
+                        <Button type='primary' disabled={newFeedback === ''} onClick={sendFeedback}>Отправить</Button>
                     </Form.Item>
                 </Form>
             }

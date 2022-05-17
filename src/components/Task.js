@@ -105,12 +105,23 @@ const Task = (props) => {
                     : <Typography.Title style={{textAlign: "left", maxWidth: "60%"}}>{props.task.title}</Typography.Title>
                 }
                 <Space style={{marginLeft: "auto"}}>
-                    {!props.task.readOnly && props.task.status === "New" &&
+                    {!props.task.readOnly && !editMode &&
+                        <Button onClick={() => setEditMode(true)}>Редактировать</Button>
+                    }
+                    {editMode
+                        ? <Button disabled={title === ''} type="primary" onClick={submitUpdate}>Сохранить</Button>
+                        : null
+                    }
+                    {editMode
+                        ? <Button onClick={cancelEdit}>Отменить</Button>
+                        : null
+                    }
+                    {props.task.owned && props.task.status === "New" &&
                         <Button onClick={() => handleStatusChange("InProgress")}>
                             Взять в работу
                         </Button>
                     }
-                    {!props.task.readOnly && props.task.status === "InProgress" &&
+                    {props.task.owned && props.task.status === "InProgress" &&
                         <Space>
                             <Button onClick={() => handleStatusChange("New")}>
                                 Отложить
@@ -119,17 +130,6 @@ const Task = (props) => {
                                 Завершить
                             </Button>
                         </Space>
-                    }
-                    {!props.task.readOnly && !editMode &&
-                        <Button onClick={() => setEditMode(true)}>Редактировать</Button>
-                    }
-                    {editMode
-                        ? <Button type="primary" onClick={submitUpdate}>Сохранить</Button>
-                        : null
-                    }
-                    {editMode
-                        ? <Button onClick={cancelEdit}>Отменить</Button>
-                        : null
                     }
                     {props.task.owned && <RequestFeedback task={props.task}/>
 

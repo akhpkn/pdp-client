@@ -57,14 +57,14 @@ const Signup = () => {
         setEmailValidationStatus('validating')
         if(!input) {
             setEmailValidationStatus('error')
-            setEmailValidationMessage('Email must not be empty')
+            setEmailValidationMessage('Поле не должно быть пустым')
             return;
         }
 
         const EMAIL_REGEX = RegExp('[^@ ]+@[^@ ]+\\.[^@ ]+');
         if(!EMAIL_REGEX.test(input)) {
             setEmailValidationStatus('error')
-            setEmailValidationMessage('Email not valid')
+            setEmailValidationMessage('Невалидный email')
             return;
         }
 
@@ -81,8 +81,61 @@ const Signup = () => {
             .catch(error => NotificationComponent.error(error.message))
     }
 
+    const [nameValidationStatus, setNameValidationStatus] = useState()
+    const [nameValidationMessage, setNameValidationMessage] = useState()
+
+    const handleNameChange = (input) => {
+        setName(input)
+        setNameValidationStatus('validating')
+        if (!input) {
+            setNameValidationStatus('error')
+            setNameValidationMessage('Поле не должно быть пустым')
+            return
+        }
+        setNameValidationStatus('success')
+        setNameValidationMessage(null)
+    }
+
+    const [surnameValidationStatus, setSurnameValidationStatus] = useState()
+    const [surnameValidationMessage, setSurnameValidationMessage] = useState()
+
+    const handleSurnameChange = (input) => {
+        setSurname(input)
+        setSurnameValidationMessage('validating')
+        if (!input) {
+            setSurnameValidationStatus('error')
+            setSurnameValidationMessage('Поле не должно быть пустым')
+            return
+        }
+        setSurnameValidationStatus('success')
+        setSurnameValidationMessage(null)
+    }
+
+    const [passwordValidationStatus, setPasswordValidationStatus] = useState()
+    const [passwordValidationMessage, setPasswordValidationMessage] = useState()
+
+    const handlePasswordChange = (input) => {
+        setPassword(input)
+        setPasswordValidationStatus('validating')
+        if (!input) {
+            setPasswordValidationStatus('error')
+            setPasswordValidationMessage('Поле не должно быть пустым')
+            return
+        }
+        if (input.length < 6) {
+            setPasswordValidationStatus('error')
+            setPasswordValidationMessage('Длина пароля должна быть не менее 6 символов')
+            return
+        }
+        setPasswordValidationStatus('success')
+        setPasswordValidationMessage(null)
+    }
+
     const hasErrors = () => {
         if (emailValidationStatus !== 'success') return true
+        if (nameValidationStatus !== 'success') return true
+        if (surnameValidationStatus !== 'success') return true
+        if (passwordValidationStatus !== 'success') return true
         return false
     }
 
@@ -101,29 +154,41 @@ const Signup = () => {
                         value={email}
                         onChange={(e) => handleEmailChange(e.target.value)}/>
                 </FormItem>
-                <FormItem label="Имя" rules={[{required: true}]}>
+                <FormItem
+                    label="Имя"
+                    hasFeedback
+                    validateStatus={nameValidationStatus}
+                    help={nameValidationMessage}>
                     <Input
                         placeholder="Имя"
                         name="name"
                         autoComplete="off"
                         value={name}
-                        onChange={(e) => setName(e.target.value)}/>
+                        onChange={(e) => handleNameChange(e.target.value)}/>
                 </FormItem>
-                <FormItem label="Фамилия" rules={[{required: true}]}>
+                <FormItem
+                    label="Фамилия"
+                    hasFeedback
+                    validateStatus={surnameValidationStatus}
+                    help={surnameValidationMessage}>
                     <Input
                         placeholder="Фамилия"
                         name="surname"
                         autoComplete="off"
                         value={surname}
-                        onChange={(e) => setSurname(e.target.value)}/>
+                        onChange={(e) => handleSurnameChange(e.target.value)}/>
                 </FormItem>
-                <FormItem label="Пароль">
+                <FormItem
+                    label="Пароль"
+                    hasFeedback
+                    validateStatus={passwordValidationStatus}
+                    help={passwordValidationMessage}>
                     <Input.Password
                         placeholder="Пароль"
                         name="password"
                         autoComplete="off"
                         value={password}
-                        onChange={(e) => setPassword(e.target.value)}/>
+                        onChange={(e) => handlePasswordChange(e.target.value)}/>
                 </FormItem>
                 <Button style={{marginBottom: "30px"}} type="primary" disabled={hasErrors()} onClick={handleSignUp}>Зарегистрироваться</Button>
             </Form>

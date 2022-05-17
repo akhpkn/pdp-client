@@ -57,6 +57,7 @@ const NewPlan = (props) => {
                 visible={showForm}
                 okText="Создать"
                 cancelText="Отменить"
+                okButtonProps={{disabled: (title === '' || dueDate === '')}}
                 onOk={handleSubmit}
                 onCancel={clearState}>
                 <Form layout={"horizontal"} style={{marginTop: "10px"}} labelCol={{span: 7}} wrapperCol={{span: 14}}>
@@ -70,6 +71,7 @@ const NewPlan = (props) => {
                     </FormItem>
                     <FormItem label="Дата завершения">
                         <DatePicker
+                            allowClear={false}
                             placeholder="Выберите дату"
                             style={{width: 150}}
                             format={dateFormat}
