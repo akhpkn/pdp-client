@@ -141,7 +141,7 @@ const PlanPage = () => {
                     {/*<div style={{marginLeft: "auto"}}>Дата создания: {TimeUtil.toDate(plan.createDt)}</div>*/}
                     {/*<div style={{marginLeft: "auto"}}>Дата завершения: {TimeUtil.toDate(plan.dueTo)}</div>*/}
                     <Space style={{ marginLeft: "auto"}}>
-                        {!editMode && (plan.accessType ==='Write' || plan.accessType ==='Owner') &&
+                        {!editMode && (plan.accessType ==='Owner') &&
                             <Button onClick={() => setEditMode(true)}>Редактировать</Button>
                         }
                         {editMode && <Button disabled={title === ''} type="primary" onClick={submitEdit}>Сохранить</Button>}
