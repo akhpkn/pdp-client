@@ -30,10 +30,10 @@ const NewTask = (props) => {
         // console.log(fetchState)
         TaskService.createTask(request)
             .then(response => {
-                notification.success({
-                    message: "PDP",
-                    description: "Таск успешно создан"
-                })
+                // notification.success({
+                //     message: "PDP",
+                //     description: "Таск успешно создан"
+                // })
                 props.setChanged()
                 setNewTaskTitle('')
                 setNewTaskAcceptanceCriteria('')

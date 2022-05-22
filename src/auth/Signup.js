@@ -35,10 +35,10 @@ const Signup = () => {
                 localStorage.setItem(AccessToken, response.token)
                 setIsAuth(true)
                 navigate('/plans')
-                notification.success({
-                    message: "PDP",
-                    description: "Вы успешно зарегистрированы!"
-                })
+                // notification.success({
+                //     message: "PDP",
+                //     description: "Вы успешно зарегистрированы!"
+                // })/
             })
             .catch(error => {
                 notification.error({

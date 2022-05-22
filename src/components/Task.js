@@ -23,10 +23,10 @@ const Task = (props) => {
         TaskService.updateTask(props.task.id, taskUpdateRequest)
             .then(response => {
                 console.log(response)
-                notification.success({
-                    message: "PDP",
-                    description: "Таск изменен!"
-                })
+                // notification.success({
+                //     message: "PDP",
+                //     description: "Таск изменен!"
+                // })
                 setEditMode(false)
                 props.setChanged()
                 return response

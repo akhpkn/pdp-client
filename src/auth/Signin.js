@@ -6,6 +6,7 @@ import {AccessToken} from "../api/ApiUtils";
 import "./Signin.css"
 import {AuthContext} from "../context";
 import {useNavigate} from "react-router-dom";
+import NotificationComponent from "../common/NotificationComponent";
 
 const FormItem = Form.Item;
 const { TextArea } = Input
@@ -15,8 +16,7 @@ const Signin = () => {
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
 
-    const {isAuth, setIsAuth} = useContext(AuthContext)
-
+    const {setIsAuth} = useContext(AuthContext)
     const navigate = useNavigate()
 
     const handleSignIn = () => {
@@ -30,12 +30,7 @@ const Signin = () => {
                 setIsAuth(true)
                 navigate('/plans')
             })
-            .catch(error =>{
-                notification.error({
-                    message: "PDP",
-                    description: error.message
-                })
-            })
+            .catch(error => NotificationComponent.error(error.message))
     }
 
     return (

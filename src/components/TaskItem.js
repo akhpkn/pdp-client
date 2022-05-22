@@ -14,10 +14,10 @@ const TaskItem = (props) => {
         TaskService.deleteTask(props.task.id)
             .then(response => {
                 console.log(response)
-                notification.success({
-                    message: "PDP",
-                    description: "Таск удален!"
-                })
+                // notification.success({
+                //     message: "PDP",
+                //     description: "Таск удален!"
+                // })
                 props.setChanged()
                 return response
             })

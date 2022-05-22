@@ -29,10 +29,10 @@ const NewPlan = (props) => {
             .then(() => {
                 clearState()
                 props.setChanged()
-                notification.success({
-                    message: "PDP",
-                    description: "План успешно создан!"
-                })
+                // notification.success({
+                //     message: "PDP",
+                //     description: "План успешно создан!"
+                // })
             })
             .catch(error => {
                 notification.error({

@@ -92,6 +92,10 @@ const NotificationsSettings = () => {
                                     <Option value="1">За 1 день</Option>
                                     <Option value="2">За 2 дня</Option>
                                     <Option value="3">За 3 дня</Option>
+                                    <Option value="4">За 4 дня</Option>
+                                    <Option value="5">За 5 дней</Option>
+                                    <Option value="6">За 6 дней</Option>
+                                    <Option value="7">За 7 дней</Option>
                                 </Select>
                             </div>
                             <div style={{marginTop: "10px"}}>

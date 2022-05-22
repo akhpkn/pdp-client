@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Avatar, Button, Comment, Form, Input, List} from "antd";
+import {Avatar, Button, Comment, Form, Input, List, Tooltip} from "antd";
 import CommentService from "../api/CommentService";
 import NotificationComponent from "../common/NotificationComponent";
 import TimeUtil from "../common/TimeUtil";
@@ -23,7 +23,7 @@ const Comments = (props) => {
             renderItem={comm => <Comment
                 // style={{border: "2px ridge #c5cad3", width: "auto"}}
                 avatar={<Avatar>{avatarTitle(comm)}</Avatar>}
-                author={`${comm.userName} ${comm.userSurname}`}
+                author={<Tooltip title={comm.userEmail}>{comm.userName} {comm.userSurname}</Tooltip>}
                 content={<Paragraph style={{whiteSpace: "pre-line", textAlign:"left", justifyContent: "flex-start"}}>{comm.text}</Paragraph>}
                 // content={<p style={{display: "flex"}}>{comm.text}</p>}
                 datetime={TimeUtil.toDateTime(comm.createDt)}/>}
@@ -55,7 +55,7 @@ const Comments = (props) => {
         }
         CommentService.create(request)
             .then(response => {
-                NotificationComponent.success("Комментарий добавлен!")
+                // NotificationComponent.success("Комментарий добавлен!")
                 needRefresh()
                 setNewComment('')
             })

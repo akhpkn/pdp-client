@@ -42,7 +42,7 @@ const ProfilePage = () => {
         }
         UserService.updateProfile(request)
             .then(() => {
-                NotificationComponent.success("Профиль обновлен!")
+                // NotificationComponent.success("Профиль обновлен!")
                 setEditClicked(false)
                 needRefresh()
             })

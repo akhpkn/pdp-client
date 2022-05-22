@@ -111,7 +111,7 @@ const PlanPage = () => {
     const submitEdit = () => {
         PlanService.updateTitle(plan.id, title)
             .then(() => {
-                NotificationComponent.success("Название изменено!")
+                // NotificationComponent.success("Название изменено!")
                 setEditMode(false)
                 needRefresh()
             })

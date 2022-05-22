@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import FeedbackService from "../api/FeedbackService";
 import NotificationComponent from "../common/NotificationComponent";
-import {Avatar, Button, Comment, Form, Input, List, Result} from "antd";
+import {Avatar, Button, Comment, Form, Input, List, Result, Tooltip} from "antd";
 import Paragraph from "antd/es/typography/Paragraph";
 import TimeUtil from "../common/TimeUtil";
 import LoadingIndicator from "../common/LoadingIndicator";
@@ -46,7 +46,7 @@ const Feedbacks = (props) => {
             itemLayout="horizontal"
             renderItem={f => <Comment
                 avatar={<Avatar>{avatarTitle(f)}</Avatar>}
-                author={`${f.authorName} ${f.authorSurname}`}
+                author={<Tooltip title={f.authorEmail}>{f.authorName} {f.authorSurname}</Tooltip>}
                 content={<Paragraph style={{whiteSpace: "pre-line", textAlign:"left", justifyContent: "flex-start"}}>{f.text}</Paragraph>}
                 datetime={TimeUtil.toDateTime(f.createDt)}/>
             }
@@ -61,7 +61,7 @@ const Feedbacks = (props) => {
         }
         FeedbackService.send(request)
             .then(response => {
-                NotificationComponent.success("Фидбек оправлен")
+                // NotificationComponent.success("Фидбек оправлен")
                 props.setChanged()
                 setNewFeedback('')
                 needRefresh()

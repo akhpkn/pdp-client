@@ -63,7 +63,7 @@ const TasksHistory = (props) => {
 
     return (
         <div>
-            <Button icon={<HistoryOutlined/>} onClick={() => setShowHistory(true)}></Button>
+            <Button icon={<HistoryOutlined/>} onClick={() => setShowHistory(true)}/>
             <Drawer
                 visible={showHistory}
                 onClose={() => setShowHistory(false)}>

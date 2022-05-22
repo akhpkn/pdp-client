@@ -36,7 +36,7 @@ const RequestFeedback = (props) => {
         }
         FeedbackService.requestNew(request)
             .then(response => {
-                NotificationComponent.success(`Запрошен фидбек у ${selectedUser.userName} ${selectedUser.userSurname}`)
+                NotificationComponent.success(`Запрошена обратная связь у ${selectedUser.userName} ${selectedUser.userSurname}`)
             })
             .catch(error => {
                 NotificationComponent.error(error.message)

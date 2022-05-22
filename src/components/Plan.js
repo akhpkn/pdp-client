@@ -31,7 +31,7 @@ const Plan = (props) => {
         PlanService.delete(props.plan.id)
             .then(() => {
                 props.setChanged()
-                NotificationComponent.success("План удален")
+                // NotificationComponent.success("План удален")
             })
             .catch(error => NotificationComponent.error(error.message))
     }
@@ -94,7 +94,7 @@ const Plan = (props) => {
                 fontSize: 16,
                 textAlign: "left"
             }}>{`Дата завершения: ${TimeUtil.toDate(props.plan.dueTo)}`}</Typography.Paragraph>
-            <Tooltip title={`${doneCnt()} выполнено / ${inProgressCnt()} в работе / ${toDoCnt()} todo`}>
+            <Tooltip title={`${doneCnt()} completed / ${inProgressCnt()} in progress / ${toDoCnt()} todo`}>
                 <Progress showInfo={false} style={{marginLeft: "10px", width: "300px"}}
                           percent={(inProgressCnt() + doneCnt()) / totalCnt() * 100}
                           successPercent={doneCnt() / totalCnt() * 100}/>
